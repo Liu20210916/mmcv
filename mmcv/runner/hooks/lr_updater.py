@@ -191,6 +191,7 @@ class StepLrUpdaterHook(LrUpdaterHook):
         super(StepLrUpdaterHook, self).__init__(**kwargs)
 
     def get_lr(self, runner, base_lr):
+        # progress应该是当前的epoch
         progress = runner.epoch if self.by_epoch else runner.iter
 
         # calculate exponential term
@@ -199,6 +200,7 @@ class StepLrUpdaterHook(LrUpdaterHook):
         else:
             exp = len(self.step)
             for i, s in enumerate(self.step):
+                # 当前epoch在step区间内时，exp=1；当前epoch大于step区间，则exp恒为2；
                 if progress < s:
                     exp = i
                     break
